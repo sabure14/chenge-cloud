@@ -1,9 +1,8 @@
 # Enterprise Home Data Center Infrastructure & Virtual Network
 
 **Project Status:** Active / Production
-**Core Stack:** OPNsense | Proxmox VE | Ubuntu | Docker | Tailscale
 
----
+**Core Stack:** OPNsense | Proxmox VE | Ubuntu | Docker | Tailscale
 
 ## 1. Problem Statement & Objectives
 
@@ -13,17 +12,15 @@ The reliance on public cloud infrastructure for personal data management introdu
 ### The Objective
 To engineer and deploy a self-hosted, enterprise-grade data center that provides highly available, secure access to critical microservices (credential management, media archiving, documentation, and media streaming). The architecture must enforce a zero-trust security model, ensuring that no internal IP addresses or services are exposed to the public internet while remaining accessible to authorized remote endpoints.
 
----
-
 ## 2. Architecture Design
 
 The infrastructure is built on a tiered model, physically separating the edge routing boundary from the compute and storage layers.
 
 ### Physical Layer (Hardware)
+*   **WAN Gateway:** Arris S33 Cable Modem
 *   **Edge Router / Firewall:** Topton N100 Micro-Appliance (10.42.10.1)
 *   **Switching / Wireless Access:** GL.iNet Flint 2 configured in "Dumb AP" mode (10.42.10.2)
 *   **Compute Hypervisor:** Beelink S12 Pro (10.42.10.11)
-*   **WAN Gateway:** Arris S33 Cable Modem
 
 ### Virtualization & Compute Layer
 *   **Hypervisor:** Proxmox VE
@@ -37,8 +34,6 @@ The environment hosts several critical stateful services deployed as Docker cont
 *   **Joplin:** End-to-end encrypted technical documentation and note synchronization.
 *   **Audiobookshelf:** Media ingestion and streaming pipeline.
 
----
-
 ## 3. Security & Isolation Strategy
 
 The environment adheres to a strict zero-trust model, utilizing defense-in-depth methodologies. 
@@ -51,8 +46,6 @@ Instead of traditional perimeter VPNs, remote access is handled via a Tailscale 
 *   **Encrypted Tunnels:** Endpoints (laptops, mobile devices) negotiate point-to-point WireGuard tunnels directly to the Ubuntu VM.
 *   **Proxy Routing (`tailscale serve`):** Services are bound to internal ports. Tailscale's built-in proxy daemon listens on the tailnet interface and routes requests (e.g., HTTPS on Port 8081 for Vaultwarden) exclusively to authenticated tailnet endpoints, preventing lateral movement across the physical local area network (LAN).
 *   **DNS Resolution:** MagicDNS is utilized for internal hostname resolution, completely bypassing external DNS leaks for local service discovery.
-
----
 
 ## 4. Lifecycle Management & Operations
 
